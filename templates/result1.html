@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font */
+            background-color: #FFD700; /* Yellow background color */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85); /* Slightly transparent white */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 50px;
+            max-width: 1200px;
+            width: 100%;
+            box-sizing: border-box;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .content-section {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 30px;
+            border-right: 1px solid #ddd; /* Separator line */
+            box-sizing: border-box;
+        }
+
+        .image-section {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-left: 30px;
+            box-sizing: border-box;
+            position: relative; /* Positioning context for absolute children */
+            min-height: 400px; /* Increased height to give more space for positioning */
+            overflow: hidden; /* Hide anything that overflows */
+        }
+
+        h1 {
+            color: #000; /* Black color for the heading */
+            margin-bottom: 30px;
+            text-align: left;
+            font-size: 2.2em;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.5em; /* Larger font size for the prediction text */
+            color: #000; /* Black color for the prediction text */
+            margin-bottom: 20px;
+            font-weight: bold; /* Make the prediction text bold */
+        }
+
+        .meter-image {
+            position: absolute; /* Position absolutely within .image-section */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the image */
+            max-width: 90%; /* Adjusted to be slightly smaller than 100% */
+            height: auto;
+            border-radius: 8px; /* Slightly rounded corners for images */
+            z-index: 1; /* Ensure meter is behind coins */
+        }
+
+        .coins-image {
+            position: absolute; /* Position absolutely within .image-section */
+            bottom: 40px; /* Adjusted to move up from the bottom */
+            right: 20px; /* Adjusted to move left from the right */
+            max-width: 30%; /* Made smaller */
+            height: auto;
+            border-radius: 8px; /* Slightly rounded corners for images */
+            z-index: 2; /* Ensure coins are in front of meter */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Stack sections vertically on smaller screens */
+                gap: 30px;
+                padding: 20px;
+            }
+
+            .content-section {
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px solid #ddd; /* Add a bottom border instead */
+                padding-bottom: 30px;
+            }
+
+            .image-section {
+                padding-left: 0;
+                padding-top: 30px;
+                min-height: 350px; /* Adjusted height for mobile */
+            }
+
+            .meter-image {
+                max-width: 85%; /* Adjusted size for smaller screens */
+                top: 45%; /* Further adjustment for mobile */
+            }
+
+            .coins-image {
+                max-width: 25%; /* Adjusted size for smaller screens */
+                bottom: 30px;
+                right: 15px;
+            }
+
+            h1, p {
+                text-align: center; /* Center text on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-section">
+            <h1>Power Consumption Analysis</h1>
+            <!-- This will display the prediction text passed from Flask -->
+            <p>Global active power is [{{ prediction_text }}]</p>
+        </div>
+
+        <div class="image-section">
+            <!-- Using the provided image URLs -->
+            <img src="https://i5.walmartimages.com/seo/Smart-Electricity-Energy-Meter-Power-Consumption-Monitor-Din-Rail-Installation_6dc0d1bb-8e5a-4c24-9ac0-c4efb7536d68.fca695bc97eabd7ce16c7b41dced735d.jpeg" alt="Electricity Meter" class="meter-image">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.FVDq238aHD0033q-IB2CsgAAAA?pid=Api&P=0&h=220" alt="Coins" class="coins-image">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Consumption Analysis</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font */
+            background-color: #FFD700; /* Yellow background color as requested and seen in image */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85); /* Slightly transparent white for the main container */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 50px; /* Space between form and image sections */
+            max-width: 1200px;
+            width: 100%;
+            box-sizing: border-box;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .form-section {
+            flex: 1;
+            min-width: 300px; /* Minimum width for form section */
+            padding-right: 30px;
+            border-right: 1px solid #ddd; /* Separator line */
+            box-sizing: border-box;
+        }
+
+        .image-section {
+            flex: 1;
+            min-width: 300px; /* Minimum width for image section */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-left: 30px; /* Add padding to the left of image section */
+            box-sizing: border-box;
+            position: relative; /* Make this the positioning context for absolute children */
+            min-height: 400px; /* Ensure enough height for overlapping images */
+        }
+
+        h1 {
+            color: #000; /* Black color for the heading */
+            margin-bottom: 30px;
+            text-align: left;
+            font-size: 2.2em;
+            font-weight: bold; /* Make the title bold as in the image */
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-group input[type="text"] {
+            width: 100%; /* Full width of its container */
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.1em;
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        button {
+            background-color: #e74c3c; /* Red color for the button */
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+            display: block; /* Make button take full width if needed, or adjust for centering */
+            width: fit-content; /* Adjust width to content */
+        }
+
+        button:hover {
+            background-color: #c0392b; /* Darker red on hover */
+        }
+
+        .meter-image {
+            position: absolute; /* Position absolutely within .image-section */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the image */
+            max-width: 90%; /* Adjusted to be slightly smaller than 100% */
+            height: auto;
+            border-radius: 8px; /* Slightly rounded corners for images */
+            z-index: 1; /* Ensure meter is behind coins */
+        }
+
+        .coins-image {
+            position: absolute; /* Position absolutely within .image-section */
+            bottom: 40px; /* Adjusted to move up from the bottom */
+            right: 20px; /* Adjusted to move left from the right */
+            max-width: 30%; /* Made smaller */
+            height: auto;
+            border-radius: 8px; /* Slightly rounded corners for images */
+            z-index: 2; /* Ensure coins are in front of meter */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Stack sections vertically on smaller screens */
+                gap: 30px;
+                padding: 20px;
+            }
+
+            .form-section {
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px solid #ddd; /* Add a bottom border instead */
+                padding-bottom: 30px;
+            }
+
+            .image-section {
+                padding-left: 0;
+                padding-top: 30px;
+                min-height: 350px; /* Adjusted height for mobile */
+            }
+
+            .meter-image {
+                max-width: 85%; /* Adjust size for smaller screens */
+                top: 45%; /* Further adjustment for mobile */
+            }
+
+            .coins-image {
+                max-width: 25%; /* Adjusted size for smaller screens */
+                bottom: 30px;
+                right: 15px;
+            }
+
+            h1, p {
+                text-align: center; /* Center text on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h1>Power Consumption Analysis</h1>
+
+            <!-- The form element is crucial for submitting data to Flask -->
+            <form action="/predict" method="POST">
+                <div class="input-group">
+                    <label for="globalReactivePower">Enter the Global reactive power value (0-1)</label>
+                    <input type="text" id="globalReactivePower" name="Global_reactive_power" placeholder="e.g., 0.2">
+                </div>
+
+                <div class="input-group">
+                    <label for="globalIntensity">Enter the Global intensity value</label>
+                    <input type="text" id="globalIntensity" name="Global_intensity" placeholder="e.g., 10.5">
+                </div>
+
+                <div class="input-group">
+                    <label for="submeterReading1">Enter the Submeter Reading 1</label>
+                    <input type="text" id="submeterReading1" name="Sub_metering_1" placeholder="e.g., 15">
+                </div>
+
+                <div class="input-group">
+                    <label for="submeterReading2">Enter the Submeter Reading 2</label>
+                    <input type="text" id="submeterReading2" name="Sub_metering_2" placeholder="e.g., 20">
+                </div>
+
+                <div class="input-group">
+                    <label for="submeterReading3">Enter the Submeter Reading 3</label>
+                    <input type="text" id="submeterReading3" name="Sub_metering_3" placeholder="e.g., 30">
+                </div>
+
+                <!-- NEW INPUT FIELD FOR VOLTAGE -->
+                <div class="input-group">
+                    <label for="voltage">Enter the Voltage value</label>
+                    <input type="text" id="voltage" name="Voltage" placeholder="e.g., 240">
+                </div>
+
+                <button type="submit">Predict</button>
+            </form>
+        </div>
+
+        <div class="image-section">
+            <!-- Using the provided image URLs -->
+            <img src="https://i5.walmartimages.com/seo/Smart-Electricity-Energy-Meter-Power-Consumption-Monitor-Din-Rail-Installation_6dc0d1bb-8e5a-4c24-9ac0-c4efb7536d68.fca695bc97eabd7ce16c7b41dced735d.jpeg" alt="Electricity Meter" class="meter-image">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.FVDq238aHD0033q-IB2CsgAAAA?pid=Api&P=0&h=220" alt="Coins" class="coins-image">
+        </div>
+    </div>
+</body>
+</html>
